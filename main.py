@@ -8,6 +8,7 @@ transport so it can be consumed by the mcp-runtime HttpSSETransport.
 from __future__ import annotations
 
 import os
+from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -24,7 +25,8 @@ PORT = int(os.getenv("PORT", "8000"))
 HOST = os.getenv("HOST", "0.0.0.0")
 
 
-async def _lifespan(_: Context) -> None:
+@asynccontextmanager
+async def _lifespan(_: Context) -> Any:
     """FastMCP lifespan hook to prepare local data."""
     DATA_ROOT.mkdir(parents=True, exist_ok=True)
     sample = DATA_ROOT / "hello.txt"
